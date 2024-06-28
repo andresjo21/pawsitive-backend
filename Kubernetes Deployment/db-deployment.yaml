@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pawsitive-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pawsitive-db
+  template:
+    metadata:
+      labels:
+        app: pawsitive-db
+    spec:
+      containers:
+      - name: pawsitive-db
+        image: andresjo/pawsitive-db:v1
+        env:
+        - name: POSTGRES_USER
+          value: "pawsitive"
+        - name: POSTGRES_PASSWORD
+          value: "12345"
+        - name: POSTGRES_DB
+          value: "pawsitive"
+        ports:
+        - containerPort: 5432

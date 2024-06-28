@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+
+  db:
+    image: amd64/postgres
+    container_name: database
+    restart: always
+    environment:
+      - POSTGRES_USER=pawsitive
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=pawsitive
+    ports:
+      - '5432:5432'
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+        - '80:80'
+    depends_on:
+      - db
+
+  app:
+    build: .
+    container_name: application
+    ports:
+      - '8081:8080'
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/pawsitive
+      - SPRING_DATASOURCE_USERNAME=pawsitive
+      - SPRING_DATASOURCE_PASSWORD=12345
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_PROFILES_ACTIVE=dev
+    depends_on:
+      - db

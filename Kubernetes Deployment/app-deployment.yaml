@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-charlie
+  labels:
+    app: backend-charlie
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-charlie
+  template:
+    metadata:
+      labels:
+        app: backend-charlie
+    spec:
+      containers:
+        - name: backend-charlie
+          image: andresjo/backend-charlie:v2
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://pawsitive-db-service:5432/pawsitive"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "pawsitive"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "12345"
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: "update"
+            - name: SPRING_PROFILES_ACTIVE
+              value: "dev"
+      restartPolicy: Always
